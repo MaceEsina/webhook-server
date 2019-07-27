@@ -1,9 +1,12 @@
-import http.server
-import socketserver
+from flask import Flask, request
 
 PORT = 9000
-Handler = http.server.SimpleHTTPRequestHandler
+app = Flask(__name__)
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print("serving at port", PORT)
-    httpd.serve_forever()
+@app.route("/reminder-lesson", methods=['POST'])
+def lesson():
+    data = request.get_json()
+    print data
+
+if __name__ == "__main__":
+    app.run(port=PORT)
