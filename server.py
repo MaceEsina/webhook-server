@@ -6,6 +6,9 @@ PORT = 9000
 app = Flask(__name__)
 
 def sendWhatsappMessage(data):
+  if not data:
+    return
+
   params = {
     'transport': 'whatsapp',
     'from': '79585802577',
@@ -13,10 +16,10 @@ def sendWhatsappMessage(data):
     'text': 'тестовое соощение whatsapp'
   }
   url = 'https://new62839487.wazzup24.com/api/v1.1/send_message'
-  headers = {
-    'Authorization': 'b6f00c29a7a64927882dbf2e3386df48'
-  }
+  headers = { 'Authorization': 'b6f00c29a7a64927882dbf2e3386df48' }
   response = requests.post(url, headers=headers, json=params)
+  print('resp whatsapp', response.text)
+
   # TODO replace == to !=
   if response.status_code == 201:
     sendSMS(data)
@@ -29,8 +32,8 @@ def sendSMS(data):
     'api_id': 'D4837EA1-2B37-F238-D41F-12E7AA13E08B'
   }
   response = requests.post(url, json=params)
-  if response.status_code == 100:
-    print('resp sms', response.text)
+  # TODO if response.status_code == 100
+  print('resp sms', response.text)
 
 def getToken():
   url = 'https://hwschool.s20.online/v2api/auth/login'
@@ -48,22 +51,25 @@ def getToken():
 
 def getCustomer(token, id):
   url = 'https://hwschool.s20.online/v2api/1/customer/update?id=1857'
-  headers = {
-    'X-ALFACRM-TOKEN': token
-  }
+  headers = { 'X-ALFACRM-TOKEN': token }
   response = requests.post(url, headers=headers)
-  print('resp api text', json.loads(response.text)['model'])
+  if response.status_code == 200:
+    return json.loads(response.text)['model']
+  return False
 
 @app.route('/reminder-lesson', methods=['POST'])
 def webhook():
   webhookData = request.get_json()
-  print('POST request data:', webhookData)
+  customerIds = json.loads(response.text)['customer_ids']
+  print('POST response data:', webhookData)
 
-  # TODO uncomment
-  # sendWhatsappMessage(webhookData)
-  # token = getToken()
-  #if token:
-  #  getCustomer(token, 1857)
+  for id in customerIds:
+    token = getToken()
+    if token:
+      customer = getCustomer(token, id)
+      print('customer info:' customer)
+      print('customer phone:', customer['phone'])
+      sendWhatsappMessage(customer)
 
   return '', 200
 
