@@ -18,10 +18,8 @@ def sendWhatsappMessage(data):
   url = 'https://new62839487.wazzup24.com/api/v1.1/send_message'
   headers = { 'Authorization': 'b6f00c29a7a64927882dbf2e3386df48' }
   response = requests.post(url, headers=headers, json=params)
-  print('resp whatsapp', response.text)
 
-  # TODO replace == to !=
-  if response.status_code == 201:
+  if response.status_code != 201:
     sendSMS(data)
 
 def sendSMS(data):
@@ -31,9 +29,9 @@ def sendSMS(data):
     'msg': 'тестовое сообщение sms',
     'api_id': 'D4837EA1-2B37-F238-D41F-12E7AA13E08B'
   }
-  response = requests.post(url, json=params)
-  # TODO if response.status_code == 100
-  print('resp sms', response.text)
+  response = requests.get(url, params=params)
+  if response.status_code != 100:
+    print('Error sms sending: ', response.text)
 
 def getToken():
   url = 'https://hwschool.s20.online/v2api/auth/login'
@@ -50,7 +48,7 @@ def getToken():
   return False
 
 def getCustomer(token, id):
-  url = 'https://hwschool.s20.online/v2api/1/customer/update?id=1857'
+  url = 'https://hwschool.s20.online/v2api/1/customer/update?id=' + str(id)
   headers = { 'X-ALFACRM-TOKEN': token }
   response = requests.post(url, headers=headers)
   if response.status_code == 200:
@@ -59,9 +57,9 @@ def getCustomer(token, id):
 
 @app.route('/reminder-lesson', methods=['POST'])
 def webhook():
-  webhookData = request.get_json()
-  customerIds = json.loads(response.text)['customer_ids']
-  print('POST response data:', webhookData)
+  data = request.get_json()
+  customerIds = json.loads(data.text)['customer_ids']
+  print('POST response data:', data)
 
   for id in customerIds:
     token = getToken()
