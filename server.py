@@ -67,7 +67,7 @@ def webhook():
     token = getToken()
     if token:
       customer = getCustomer(token, id)
-      print('customer info:' customer)
+      print('customer info:', customer)
       print('customer phone:', customer['phone'])
       sendWhatsappMessage(customer)
 
