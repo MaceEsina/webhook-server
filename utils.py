@@ -40,7 +40,7 @@ def sendMessage(customer, lesson):
   response = requests.post(url, headers=headers, json=params)
 
   # send sms when the customer hasn't whatsapp
-  if response.status_code != 201:
+  if response.status_code == 201:
     url = 'https://sms.ru/sms/send'
     params = {
       'to': '79111318607',
