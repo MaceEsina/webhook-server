@@ -9,7 +9,7 @@ app = Flask(__name__)
 def webhook():
   data = request.get_json()
   print('Webhook data:', data)
-  print('Webhook data type:', type(data))
+  print('Webhook data keys:', list(data.keys()))
   customerIds = data['customer_ids']
 
   for id in customerIds:
