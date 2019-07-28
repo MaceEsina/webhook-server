@@ -38,7 +38,7 @@ def getToken():
     'email': 'magistresina@gmail.com',
     'api_key': '7de9c3ec-a931-11e9-9333-0cc47a6ca50e'
   }
-  response = requests.post(url, json=params)se
+  response = requests.post(url, json=params)
   if response.status_code == 200:
     return json.loads(response.text)['token']
 
