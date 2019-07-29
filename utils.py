@@ -1,5 +1,7 @@
-import requests
-import json
+from babel.dates import format_date
+from datetime import date
+from requests import post, get
+from json import loads
 
 def getToken():
   url = 'https://hwschool.s20.online/v2api/auth/login'
@@ -27,12 +29,12 @@ def sendMessage(customer, lesson):
   if not customer:
     return
 
-  # TODO delete
-  return
-
-  number = ''.join(i for i in customer['phone_number'][0] if i.isdigit())
-  time = customer['time_from']
-  message = f'Напоминаем, что сегодня в {time} по московскому времени у Вас запланирован урок. IT школа Hello world.'
+  phoneStr = customer['phone'][0]
+  phone = parsePhoneNumber(phoneStr)
+  date = lesson['fields_new']['time_from']
+  time = parseTime(date)
+  day = parseDay(date)
+  message = f'Напоминаем, что {day} в {time} по московскому времени у Вас запланирован урок. IT школа Hello world.'
   params = {
     'transport': 'whatsapp',
     'from': '79585802577',
@@ -42,6 +44,8 @@ def sendMessage(customer, lesson):
   url = 'https://new62839487.wazzup24.com/api/v1.1/send_message'
   headers = { 'Authorization': 'b6f00c29a7a64927882dbf2e3386df48' }
   response = requests.post(url, headers=headers, json=params)
+  print('phone:', phone)
+  print('message:', message)
 
   # send sms when the customer hasn't whatsapp
   if response.status_code != 201:
@@ -55,3 +59,16 @@ def sendMessage(customer, lesson):
     if responseSMS.status_code != 200:
       print('Error sms sending for customer with id', customer['id'])
       print('Error text:', responseSMS.text)
+
+def parsePhoneNumber(str):
+  return ''.join(i for i in str if i.isdigit())
+
+def parseTime(str):
+  return str.split(' ')[1][:-3]
+
+def parseDay(str):
+  dayStrArr = str.split(' ')[0].split('-')
+  dayIntArr = list(map(int, dayStrArr))
+  d = date(*dayIntArr)
+
+  return format_date(d, 'd MMMM', locale='rus')

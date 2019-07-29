@@ -1,6 +1,5 @@
 from flask import Flask, request
 from utils import getToken, getCustomer, sendMessage
-import json
 
 PORT = 9000
 app = Flask(__name__)
