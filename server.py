@@ -6,7 +6,7 @@ PORT = 9000
 app = Flask(__name__)
 
 @app.route('/reminder-lesson', methods=['POST'])
-def webhook():
+def lessonWebhook():
   data = request.get_json()
   print('Webhook data:', data)
   customerIds = data['fields_new']['customer_ids']

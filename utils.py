@@ -27,8 +27,11 @@ def sendMessage(customer, lesson):
   if not customer:
     return
 
-  id = customer['id']
-  message = 'пробный урок у клиента ' + str(id)
+  # TODO delete
+  return
+
+  number = ''.join(i for i in customer['phone_number'][0] if i.isdigit())
+  message = f'Напоминаем, что сегодня в {customer['time_from']} по московскому времени у Вас запланирован урок. IT школа Hello world.'
   params = {
     'transport': 'whatsapp',
     'from': '79585802577',
@@ -49,5 +52,5 @@ def sendMessage(customer, lesson):
     }
     responseSMS = requests.get(url, params=params)
     if responseSMS.status_code != 200:
-      print('Error sms sending for customer with id', id)
+      print('Error sms sending for customer with id', customer['id'])
       print('Error text:', responseSMS.text)
