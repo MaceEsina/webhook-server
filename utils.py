@@ -38,20 +38,19 @@ def sendMessage(customer, lesson):
   params = {
     'transport': 'whatsapp',
     'from': '79585802577',
+    # 'to': phone,
     'to': '79111318607',
     'text': message
   }
   url = 'https://new62839487.wazzup24.com/api/v1.1/send_message'
   headers = { 'Authorization': 'b6f00c29a7a64927882dbf2e3386df48' }
   response = post(url, headers=headers, json=params)
-  print('phone:', phone)
-  print('message:', message)
 
   # send sms when the customer hasn't whatsapp
   if response.status_code != 201:
     url = 'https://sms.ru/sms/send'
     params = {
-      'to': '79111318607',
+      # 'to': phone,
       'msg': message,
       'api_id': 'D4837EA1-2B37-F238-D41F-12E7AA13E08B'
     }
