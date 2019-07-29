@@ -9,9 +9,9 @@ def getToken():
     'email': 'magistresina@gmail.com',
     'api_key': '7de9c3ec-a931-11e9-9333-0cc47a6ca50e'
   }
-  response = requests.post(url, json=params)
+  response = post(url, json=params)
   if response.status_code == 200:
-    return json.loads(response.text)['token']
+    return loads(response.text)['token']
 
   print('Cannot get alfaCRM API token, error code:', response.status_code)
   print('Error text:', response.text)
@@ -20,9 +20,9 @@ def getToken():
 def getCustomer(token, id):
   url = 'https://hwschool.s20.online/v2api/1/customer/update?id=' + str(id)
   headers = { 'X-ALFACRM-TOKEN': token }
-  response = requests.post(url, headers=headers)
+  response = post(url, headers=headers)
   if response.status_code == 200:
-    return json.loads(response.text)['model']
+    return loads(response.text)['model']
   return False
 
 def sendMessage(customer, lesson):
@@ -43,7 +43,7 @@ def sendMessage(customer, lesson):
   }
   url = 'https://new62839487.wazzup24.com/api/v1.1/send_message'
   headers = { 'Authorization': 'b6f00c29a7a64927882dbf2e3386df48' }
-  response = requests.post(url, headers=headers, json=params)
+  response = post(url, headers=headers, json=params)
   print('phone:', phone)
   print('message:', message)
 
@@ -55,7 +55,7 @@ def sendMessage(customer, lesson):
       'msg': message,
       'api_id': 'D4837EA1-2B37-F238-D41F-12E7AA13E08B'
     }
-    responseSMS = requests.get(url, params=params)
+    responseSMS = get(url, params=params)
     if responseSMS.status_code != 200:
       print('Error sms sending for customer with id', customer['id'])
       print('Error text:', responseSMS.text)
