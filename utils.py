@@ -31,7 +31,8 @@ def sendMessage(customer, lesson):
   return
 
   number = ''.join(i for i in customer['phone_number'][0] if i.isdigit())
-  message = f'Напоминаем, что сегодня в {customer['time_from']} по московскому времени у Вас запланирован урок. IT школа Hello world.'
+  time = customer['time_from']
+  message = f'Напоминаем, что сегодня в {time} по московскому времени у Вас запланирован урок. IT школа Hello world.'
   params = {
     'transport': 'whatsapp',
     'from': '79585802577',
